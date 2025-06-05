@@ -1,0 +1,11 @@
+<launch>
+   <!-- YD-lidar's X4 lidar -->
+   <include file="$(find allbot)/launch/include/X4.launch" />
+
+  <!-- Load Allbot URDF -->
+  <include file="$(find allbot_urdf)/launch/urdf.launch" /> 
+  
+   <!-- Run rviz with laser view configuration 
+   <arg name="rvizconfig" default="$(find allbot)/rviz/laser.rviz" />
+   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+</launch>
