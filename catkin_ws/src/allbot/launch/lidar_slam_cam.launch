@@ -1,0 +1,17 @@
+<launch>
+   <!-- YD-lidar's X4 lidar -->
+   <include file="$(find allbot)/launch/include/X4.launch" />
+
+   <include file="$(find allbot_param)/navigation/slam_gmapping.xml" />
+
+  <!-- Load Allbot URDF -->
+  <include file="$(find allbot_urdf)/launch/urdf.launch" /> 
+
+  <!-- Load Allbot cam -->
+  <include file="$(find jetson_csi_cam)/jetson_csi_cam.launch" /> 
+
+  <!-- Run rviz with laser, gmapping slam configuration 
+  <arg name="rvizconfig" default="$(find allbot)/rviz/slam.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />  -->
+
+</launch>

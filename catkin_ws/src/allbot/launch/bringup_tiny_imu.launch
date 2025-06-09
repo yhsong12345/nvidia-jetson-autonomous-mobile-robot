@@ -1,0 +1,38 @@
+<launch>
+
+    <node name="arduino_serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
+      <!-- If the Arduino Mega 256 connecting with USB setial(ttyUSBX) -->
+      <!-- <param name="port" value="/dev/allbot" /> -->
+      <!-- <param name="baud" value="57600" /> -->
+      <!--                                     -->
+      <!-- On jetson Nano, If the Arduino Mega 2560 connecting with 'ttyTHS1' 
+           its baud must be "115200"(not changeable) -->
+      <param name="port" value="/dev/ttyTHS1" />
+      <param name="baud" value="115200" />
+    </node>
+  
+    <!-- Publish allbot odometry -->
+    <node pkg="allbot_base" name="allbot_base_node" type="allbot_base_node">
+    	<param name="linear_scale" type="double" value="1.0" /> <!-- org: 1.06 -->
+    </node>
+
+    <!-- Publish static transform from base_footprint to base_link -->
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_base_link" 
+          args="0 0 0.098 0 0 0  /base_footprint /base_link 100"/>
+
+    <!-- MPU 6050 IMU driver without IMU Calibration(imu_calib) -->   
+    <node pkg="mpu_6050_driver" type="imu_node.py" name="imu_node" output="screen" respawn="false">
+    </node>
+
+    <!-- IMU Compelmentary Filter -->  
+    <node name="imu_filter_node_for_orientation" pkg="imu_complementary_filter" type="complementary_filter_node" >
+        <param name="fixed_frame" value="base_footprint" /> 
+        <!-- param name="publish_tf" value="true" / -->
+        <param name="use_mag" value="false" />
+        <param name="use_magnetic_field_msg" value="false" />
+    </node>
+
+    <!-- Publish static transform from base_footprint to imu_link -->
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_imu_link" args="0 0 0 0 0 0 /base_footprint /imu_link 100"/>
+    
+</launch>

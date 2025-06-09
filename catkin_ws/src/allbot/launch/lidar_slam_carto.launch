@@ -1,0 +1,25 @@
+<launch>
+   <!-- YD-lidar's X4 lidar -->
+   <include file="$(find allbot)/launch/include/X4.launch" />
+
+   <!-- launching cartographer node and parameters -->
+   <node name="cartographer_node" pkg="cartographer_ros" type="cartographer_node" args="
+         -configuration_directory $(find allbot)/launch/include 
+         -configuration_basename allbot_lidar.lua" output="screen">
+      <remap from="scan" to="scan"/>
+   </node>
+   
+   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+
+
+   <!-- Load Allbot URDF -->
+   <include file="$(find allbot_urdf)/launch/urdf.launch" /> 
+
+   <!-- Load Allbot cam -->
+   <include file="$(find jetson_csi_cam)/jetson_csi_cam.launch" /> 
+
+  <!-- Run rviz with laser, gmapping slam configuration 
+  <arg name="rvizconfig" default="$(find allbot)/rviz/slam.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />  -->
+
+</launch>

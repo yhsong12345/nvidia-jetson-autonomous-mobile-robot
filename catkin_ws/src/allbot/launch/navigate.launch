@@ -1,0 +1,22 @@
+<launch>
+  <!-- ydlidar : model = X4 -->
+  <include file="$(find allbot)/launch/include/X4.launch" />
+
+  <!-- Load Allbot URDF -->
+  <include file="$(find allbot_urdf)/launch/urdf.launch" /> 
+
+  <!-- Map server -->
+  <arg name="map_file" default="$(find allbot)/maps/map.yaml"/>
+  <node pkg="map_server" name="map_server"  type="map_server" args="$(arg map_file)" />
+
+  <!-- AMCL -->
+  <include file="$(find allbot)/launch/amcl.launch" />
+
+  <!-- Move base -->
+  <include file="$(find allbot_param)/navigation/move_base.xml" />
+
+  <!-- Run rviz with laser, gmapping slam configuration 
+  <arg name="rvizconfig" default="$(find allbot)/rviz/navigate.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+
+</launch>
